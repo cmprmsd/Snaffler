@@ -295,6 +295,20 @@ namespace SnaffCore
                     // skip any that are in the exclusion list
                     continue;
                 }
+                // Reverse DNS lookup
+                var computerName = "";
+                try
+                {
+                    Mq.Trace("Performing reverse lookup for " + computer);
+                    IPHostEntry result = Dns.GetHostEntry(computer);
+                    computerName = result.HostName;
+                    Mq.Trace("Got DNSName " + computerName + " for " + computer);
+                }
+                catch (Exception e)
+                {
+                    Mq.Degub(e.Message);
+                    //Console.WriteLine(ex.Message);
+                }
                 // ShareFinder Task Creation - this kicks off the rest of the flow
                 Mq.Trace("Creating a ShareFinder task for " + computer);
                 ShareTaskScheduler.New(() =>
